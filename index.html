@@ -1,0 +1,70 @@
+
+<html>
+<head>
+<meta charset="utf-8" />
+<title>CSC443: News Update System</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function()
+{	
+
+$("#count").keypress(function(e)
+	{	
+	
+	
+	if(e.which==13)
+		{	
+		
+		var city = $("#city").val();
+			var country=$("#count").val();
+			$.ajax
+			({
+					url:'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22'+city+'%2C%20'+country+'%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys',
+					success: function(json_weather){
+						$('<h2>').text(json_weather.query.results.channel.title).appendTo('#output');
+						$('<h3>').text(json_weather.query.results.channel.wind.speed).appendTo('#output');
+						$('<h3>').text(json_weather.query.results.channel.item.condition.date).appendTo('#output');
+						$('<h3>').text(json_weather.query.results.channel.item.condition.temp).appendTo('#output');
+						$('<h3>').text(json_weather.query.results.channel.item.condition.text).appendTo('#output');
+					}
+				});
+			}
+
+		
+	});
+});
+
+
+</script>
+<style>
+body{
+  width: 900px;
+  margin: 0 auto;
+  font-family: Arial;
+}
+#output{
+  width:600px;
+  margin:0 auto;
+  text-align: center;
+  padding:10px 0px 10px 0px;
+}
+h2{
+  font-weight: bold;
+  color:#003399;
+}
+h3{
+  color:#003399;
+}
+</style>
+</head>
+<body>
+<form action="#" method="post">
+<h1>City: <input type="text" id="city" name="CITY" size="30" placeholder="Enter your city"/></h1>
+<h1>Country: <input type="text" id="count" name="COUNTRY" size="30" placeholder="Enter your country"/></h1>
+
+</form>
+<div id="output"></div>
+</body>
+</html>
